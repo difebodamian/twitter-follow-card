@@ -36,6 +36,11 @@ const users = [
         name : 'Franco Pisso',
         userName : 'francopisso',
         initialIsFollowing : false
+    },
+    {
+        name : 'Probando',
+        userName : 'probando',
+        initialIsFollowing : true
     }
 ]
 export function App() {
