@@ -11,7 +11,7 @@ export function ShowMore() {
           data-url="{{product.url}}"
           data-image-url="{{product.images.first}}"
           data-description="{{product.description}}">
-      </div>
+        </div>
       </div>
     )
 }
