@@ -34,6 +34,20 @@ const WINNER_COMBOS = [
   [2, 4, 6]
 ]
 
+const EndOfGameMessage = ({ winner, restartGame, end }) => {
+  const className = `end ${winner & 'winner'}`
+  const text = 'El ganador es ' + winner
+  winner ? console.log('winner') : null
+  winner ? console.log(end) : null
+  return(
+    <section className={className}>
+      <span className='text'>
+        {text}
+      </span>
+    </section>       
+  )
+}
+
 function App() {
 
   // creamos el tablero, con un valor por defecto de 9 objetos vacíos
@@ -42,6 +56,7 @@ function App() {
   // por defecto el primer turno va a ser del jugador X
   const [turn, setTurn] = useState(TURNS.X);
 
+  
   // por defecto no hay ganador
   // con un false, se puede declarar un empate,
   // después intentar que el jugador ponga su nombre, 
@@ -52,13 +67,16 @@ function App() {
   // y el nombre de la máquina
   // para así poder determinar de una manera más gráfica el ganador
   // const TURNS = {
-  // X : 'X',
-  // O : 'O'
-  const [winner, setWinner] = useState(null);
+    // X : 'X',
+    // O : 'O'
+    const [winner, setWinner] = useState(null);
+    
+    
+    const [end, setEnd] = useState(false);
+
 
   const checkBoard = (boardToCheck) => {
     if (!boardToCheck.includes(null)) {
-      console.log('empate')
       return false
     } else {
       for (const combo of WINNER_COMBOS) {
@@ -68,22 +86,28 @@ function App() {
           boardToCheck[a] === boardToCheck[b] &&
           boardToCheck[a] === boardToCheck[c]
         ) {
-          console.log('The winner is: ' + boardToCheck[a])
           return boardToCheck[a]
         }
       } 
     }
   }
   
+  const checkEnd = (winner, end) => {
+    console.log('hay ganador')
+    console.log(winner);
+    console.log(end)
+    
+  }
 
   const updateBoard = (index) => {
-    // si hay un ganador, no se puede seguir jugando
-    if (winner) return
-
+    
+    
     // si el cuadrado seleccionado contiene algo (es distinto a null)
     // finalizamos la ejecución de la función con el 'return'
     // por lo tanto no actualizamos el tablero
-    if (board[index]) return 
+    //        O
+    // si hay un ganador, no se puede seguir jugando
+    if (board[index] || winner || end) return 
 
     // si el cuadrado seleccionado está vacío (o su valor es null), sigue la función
 
@@ -105,7 +129,18 @@ function App() {
     // se crea una variable con el valor el jugador ganador
     const newWinner = checkBoard(newBoard);
     // si se encuentra un ganador, se cambia el estado
-    checkBoard(newBoard) ? setWinner(newWinner) : null
+    if (newWinner) {
+      setWinner(newWinner)
+      const newEnd = true
+      setEnd(newEnd)
+      checkEnd(newWinner, newEnd)
+    } else if (newWinner === false) {
+      setWinner(false)
+      const newEnd = true
+      setEnd(newEnd)
+      checkEnd(newWinner, newEnd)
+    }
+
   }
 
   return (
@@ -139,14 +174,7 @@ function App() {
       </section>
 
       {/* agregar funcionalidad de agregar cartel que diga quien es el ganador, si hay */}
-      <section className='end-of-game'>
-        <span className='winner-true'>
-          The winner is: {winner}
-        </span>
-        <span className='draw'>
-          It's a draw
-        </span>
-      </section>
+      <EndOfGameMessage winner={winner} checkEnd={checkEnd} />
     </main>
   )
 }

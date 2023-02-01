@@ -147,10 +147,9 @@ body {
   font-size: 48px;
 }
 
-.end-of-game {
+.end {
   display: none;
 }
-.end-of-game.winner {
+.end.winner {
   display: flex;
-  place-content: center;
 }
